@@ -1,6 +1,15 @@
-package com.img;
+package Tutorial1;
+
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+
+
 import java.io.File;
+import java.io.FileInputStream;
+
 import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,20 +24,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-@WebServlet("/FileUploadServlet")
+@WebServlet(name = "FileUploadServlet", urlPatterns = {"/FileUploadServlet"})
 @MultipartConfig
 public class FileUploadServlet extends HttpServlet 
 {
-    public static String A="";
-    public static String B="";
+
 	private static final long serialVersionUID = 1L;
 	@Override
     protected void doPost(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException 
     {
    response.setContentType("text/html;charset=UTF-8");
-   final String path = "C:/Users/Trainee/workspace/1st/com.imgUpl/WebContent/image";
-   final Part filePart = request.getPart("fname");
+//final String path = request.getParameter("destination");
+   final String path = "C:/Users/Trainee/workspace/1st/Tutorial/WebContent/image/";
+   final Part filePart = request.getPart("file");
     final String fileName = getFileName(filePart); 
    OutputStream out = null;
     InputStream filecontent = null; 
@@ -42,12 +51,24 @@ public class FileUploadServlet extends HttpServlet
         }
         PrintWriter pw=response.getWriter(); 
         pw.write(fileName);
-       A= fileName;
-       
-       B= path + File.separator + fileName;
-       App a=new App();
-        a.main123(B,A);
-      
+       // String filename=path + File.separator+ fileName;
+        /*response.setContentType("image/jpeg");
+        ServletOutputStream out1;
+        out1 = response.getOutputStream();
+        FileInputStream flinp = new FileInputStream(filename);
+        BufferedInputStream buffinp = new BufferedInputStream(flinp);
+        BufferedOutputStream buffoup = new BufferedOutputStream(out1);
+        int ch=0;
+        while ((ch=buffinp.read()) != -1) 
+        {
+   
+            buffoup.write(ch);
+
+        }
+        buffinp.close();
+        flinp.close();
+        buffoup.close();
+        out1.close(); */
 }
     private String getFileName(Part part) {
         for (String cd : part.getHeader("content-disposition").split(";")) {
@@ -59,6 +80,20 @@ public class FileUploadServlet extends HttpServlet
         return null;
     }
 
-
+/*private String getFileName(final Part part)
+{
+    final String partHeader = part.getHeader("content-disposition");
+    LOGGER.log(Level.INFO,"Part Header = {0}",partHeader);
+    for (String content : part.getHeader("content-disposition").split(";"))
+    {
+        if (content.trim().startsWith("filename")) 
+        {
+            return content.substring
+            		(
+                    content.indexOf('=') + 1).trim().replace("\"", "");
+        }
+    }
+    return null;
+}*/
   
 }
